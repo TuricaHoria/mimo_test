@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Mimo Test</string>
+    <string name="checkmark_symbol">✓</string>
+    <string name="correct_message">Correct!</string>
+    <string name="cross_symbol">✗</string>
+    <string name="wrong_message">Try again</string>
+    <string name="done_text">Done</string>
+    <string name="mimo_logo_content_description">Mimo logo</string>
+    <string name="lesson_title">Lesson %1$d</string>
+    <string name="retry_button">Retry</string>
+    <string name="run_button">Run</string>
+    <string name="error_message_preview">Something went wrong</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_solve_lesson_first">Please solve the lesson first</string>
+    <string name="splash_banner_content_description">Mimo banner</string>
+</resources>

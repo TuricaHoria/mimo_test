@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Correct animation overlay -->
+    <integer name="correct_animation_delay_millis">1800</integer>
+    <integer name="correct_animation_duration_millis">700</integer>
+    <integer name="correct_animation_initial_scale">60</integer>
+    <integer name="correct_animation_target_scale">100</integer>
+    <integer name="correct_animation_initial_alpha">0</integer>
+    <integer name="correct_animation_target_alpha">100</integer>
+    <dimen name="correct_animation_spacer_height">8dp</dimen>
+    
+    <!-- Wrong animation overlay -->
+    <integer name="wrong_animation_delay_millis">1500</integer>
+    <integer name="wrong_animation_duration_millis">600</integer>
+    <integer name="wrong_animation_initial_scale">60</integer>
+    <integer name="wrong_animation_target_scale">100</integer>
+    <integer name="wrong_animation_initial_alpha">0</integer>
+    <integer name="wrong_animation_target_alpha">100</integer>
+    <dimen name="wrong_animation_spacer_height">8dp</dimen>
+    
+    <!-- Done screen -->
+    <integer name="done_screen_logo_initial_scale">30</integer>
+    <integer name="done_screen_logo_target_scale">100</integer>
+    <integer name="done_screen_logo_entrance_duration_millis">700</integer>
+    <dimen name="done_screen_logo_height">140dp</dimen>
+    <dimen name="done_screen_spacer_height">24dp</dimen>
+    
+    <!-- Pulse animations -->
+    <integer name="logo_pulse_initial_scale">98</integer>
+    <integer name="logo_pulse_target_scale">102</integer>
+    <integer name="logo_pulse_duration_millis">1200</integer>
+    
+    <integer name="text_pulse_initial_scale">95</integer>
+    <integer name="text_pulse_target_scale">105</integer>
+    <integer name="text_pulse_duration_millis">1400</integer>
+    
+    <!-- Lesson screen dimensions -->
+    <dimen name="lesson_screen_top_padding">32dp</dimen>
+    <dimen name="lesson_screen_bottom_padding">8dp</dimen>
+    <dimen name="lesson_title_bottom_padding">16dp</dimen>
+    <dimen name="lesson_row_min_height">72dp</dimen>
+    <dimen name="lesson_row_corner_radius">2dp</dimen>
+    <dimen name="lesson_row_horizontal_padding">12dp</dimen>
+    <dimen name="lesson_row_vertical_padding">12dp</dimen>
+    <dimen name="lesson_row_bottom_padding">16dp</dimen>
+    <dimen name="lesson_input_height">48dp</dimen>
+    <dimen name="lesson_error_horizontal_padding">16dp</dimen>
+    <dimen name="lesson_spacer_height">8dp</dimen>
+    <dimen name="lesson_button_height">64dp</dimen>
+    <dimen name="lesson_button_bottom_padding">8dp</dimen>
+    <dimen name="lesson_button_corner_radius">8dp</dimen>
+    
+    <!-- Splash screen -->
+    <integer name="splash_screen_duration_millis">2000</integer>
+</resources>
