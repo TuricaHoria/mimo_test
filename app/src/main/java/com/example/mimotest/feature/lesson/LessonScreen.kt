@@ -3,12 +3,10 @@ package com.example.mimotest.feature.lesson
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -16,10 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,19 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.heightIn
 import com.example.mimotest.feature.lesson.LessonContract.Intent
 import com.example.mimotest.feature.lesson.LessonContract.State
 import com.example.mimotest.R
-import androidx.core.graphics.toColorInt
 
 @Composable
 fun LessonRoute(
@@ -121,7 +111,6 @@ private fun LessonContent(
     modifier: Modifier = Modifier
 ) {
     val currentLesson = state.lessons.getOrNull(state.currentIndex)
-    val inputRange = currentLesson?.input
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -143,126 +132,14 @@ private fun LessonContent(
                     .padding(bottom = dimensionResource(R.dimen.lesson_title_bottom_padding))
             )
             
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = dimensionResource(R.dimen.lesson_row_bottom_padding))
-                .heightIn(min = dimensionResource(R.dimen.lesson_row_min_height))
-                .background(
-                    color = colorResource(R.color.lesson_row_background),
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(
-                        dimensionResource(R.dimen.lesson_row_corner_radius)
-                    )
+            if (currentLesson != null) {
+                LessonContentRow(
+                    lesson = currentLesson,
+                    currentInputText = state.currentInputText,
+                    onInputChanged = { text -> onIntent(Intent.InputChanged(text)) },
+                    modifier = Modifier.fillMaxWidth()
                 )
-                .padding(
-                    horizontal = dimensionResource(R.dimen.lesson_row_horizontal_padding),
-                    vertical = dimensionResource(R.dimen.lesson_row_vertical_padding)
-                )
-        ) {
-            if (currentLesson == null) {
-                // No leson data yet keep row empty to avoid extra preview text
-            } else if (inputRange == null) {
-                currentLesson.content.forEach { segment ->
-                    Text(
-                        text = segment.text,
-                        color = segment.color.toColorOrDefault(),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            } else {
-                val fullText = currentLesson.content.joinToString(separator = "") { it.text }
-                val safeStart = inputRange.startIndex.coerceIn(0, fullText.length)
-                val safeEnd = inputRange.endIndex.coerceIn(safeStart, fullText.length)
-
-                var cumulativeIndex = 0
-                var inputSegmentIndex = -1
-                var inputSegmentStart = 0
-
-                currentLesson.content.forEachIndexed { index, segment ->
-                    val segStart = cumulativeIndex
-                    val segEnd = cumulativeIndex + segment.text.length
-                    if (safeStart >= segStart && safeEnd <= segEnd && inputSegmentIndex == -1) {
-                        inputSegmentIndex = index
-                        inputSegmentStart = segStart
-                    }
-                    cumulativeIndex = segEnd
-                }
-
-                if (inputSegmentIndex == -1) {
-                    currentLesson.content.forEach { segment ->
-                        Text(
-                            text = segment.text,
-                            color = segment.color.toColorOrDefault(),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                } else {
-                    currentLesson.content.forEachIndexed { index, segment ->
-                        when {
-                            index < inputSegmentIndex -> {
-                                Text(
-                                    text = segment.text,
-                                    color = segment.color.toColorOrDefault(),
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                            }
-
-                            index > inputSegmentIndex -> {
-                                Text(
-                                    text = segment.text,
-                                    color = segment.color.toColorOrDefault(),
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                            }
-
-                            else -> {
-                                val segStart = inputSegmentStart
-                                val localStart = safeStart - segStart
-                                val localEnd = safeEnd - segStart
-                                val beforePart = segment.text.substring(0, localStart.coerceAtLeast(0))
-                                val afterPart = segment.text.substring(localEnd.coerceAtMost(segment.text.length))
-
-                                if (beforePart.isNotEmpty()) {
-                                    Text(
-                                        text = beforePart,
-                                        color = segment.color.toColorOrDefault(),
-                                        style = MaterialTheme.typography.bodyLarge
-                                    )
-                                }
-
-                                OutlinedTextField(
-                                    value = state.currentInputText,
-                                    onValueChange = { text -> onIntent(Intent.InputChanged(text)) },
-                                    singleLine = true,
-                                    textStyle = MaterialTheme.typography.bodyMedium.copy(
-                                        color = colorResource(R.color.lesson_input_text_color)
-                                    ),
-                                    modifier = Modifier.height(dimensionResource(R.dimen.lesson_input_height)),
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        focusedTextColor = colorResource(R.color.lesson_input_text_color),
-                                        unfocusedTextColor = colorResource(R.color.lesson_input_text_color),
-                                        cursorColor = MaterialTheme.colorScheme.primary,
-                                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                        unfocusedBorderColor = MaterialTheme.colorScheme.primary,
-                                        focusedContainerColor = colorResource(R.color.lesson_input_container_color),
-                                        unfocusedContainerColor = colorResource(R.color.lesson_input_container_color)
-                                    )
-                                )
-
-                                if (afterPart.isNotEmpty()) {
-                                    Text(
-                                        text = afterPart,
-                                        color = segment.color.toColorOrDefault(),
-                                        style = MaterialTheme.typography.bodyLarge
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
             }
-        }
 
 
         Box(
@@ -345,13 +222,6 @@ private fun ErrorDialog(
         modifier = modifier
     )
 }
-
-private fun String.toColorOrDefault(): Color =
-    try {
-        Color(this.toColorInt())
-    } catch (_: IllegalArgumentException) {
-        Color.Unspecified
-    }
 
 @Preview(showBackground = true, showSystemUi = true, name = "Lesson - Normal")
 @Composable
