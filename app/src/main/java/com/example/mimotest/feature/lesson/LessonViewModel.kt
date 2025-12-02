@@ -8,7 +8,6 @@ import com.example.mimotest.feature.lesson.LessonContract.State
 import com.example.mimotest.feature.lesson.data.LessonRepository
 import kotlinx.coroutines.launch
 
-
 class LessonViewModel(
     private val repository: LessonRepository
 ) : MviViewModel<State, Intent, Effect>(State()) {

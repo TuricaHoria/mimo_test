@@ -19,6 +19,7 @@ retrofit = "3.0.0"
 robolectric = "4.16"
 roomVersion = "2.7.0"
 turbine = "1.2.1"
+koin = "3.5.6"
 
 [libraries]
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
@@ -49,6 +50,8 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
