@@ -14,7 +14,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -167,7 +172,11 @@ fun WrongAnimationOverlay(
 }
 
 @Composable
-fun DoneScreen(modifier: Modifier = Modifier) {
+fun DoneScreen(
+    onStartAgain: () -> Unit,
+    onCloseApp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var started by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         started = true
@@ -218,7 +227,12 @@ fun DoneScreen(modifier: Modifier = Modifier) {
             .background(doneBackgroundColor),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = dimensionResource(R.dimen.done_screen_horizontal_padding))
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.mimo_icon),
                 contentDescription = stringResource(R.string.mimo_logo_content_description),
@@ -240,6 +254,34 @@ fun DoneScreen(modifier: Modifier = Modifier) {
                     scaleY = textPulseScale
                 )
             )
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.done_screen_buttons_spacer_height)))
+            Button(
+                onClick = onStartAgain,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimensionResource(R.dimen.done_screen_button_height)),
+                shape = RoundedCornerShape(dimensionResource(R.dimen.done_screen_button_corner_radius)),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = colorResource(R.color.done_button_content_color)
+                )
+            ) {
+                Text(stringResource(R.string.start_again_button))
+            }
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.done_screen_button_spacing)))
+            Button(
+                onClick = onCloseApp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimensionResource(R.dimen.done_screen_button_height)),
+                shape = RoundedCornerShape(dimensionResource(R.dimen.done_screen_button_corner_radius)),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.done_close_button_background),
+                    contentColor = colorResource(R.color.done_button_content_color)
+                )
+            ) {
+                Text(stringResource(R.string.close_button))
+            }
         }
     }
 }

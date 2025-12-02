@@ -38,6 +38,8 @@ object LessonContract {
     sealed interface Intent : MviIntent {
         data object LoadLessons : Intent
         data object Retry : Intent
+        data object DismissError : Intent
+        data object StartAgain : Intent
         data class InputChanged(val text: String) : Intent
         data object CheckAnswerClicked : Intent
         data object NextLessonClicked : Intent

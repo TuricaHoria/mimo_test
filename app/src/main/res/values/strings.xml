@@ -12,5 +12,8 @@
     <string name="error_message_preview">Something went wrong</string>
     <string name="error_unknown">Unknown error</string>
     <string name="error_solve_lesson_first">Please solve the lesson first</string>
+    <string name="error_dialog_title">Error</string>
     <string name="splash_banner_content_description">Mimo banner</string>
+    <string name="start_again_button">Start Again</string>
+    <string name="close_button">Close</string>
 </resources>

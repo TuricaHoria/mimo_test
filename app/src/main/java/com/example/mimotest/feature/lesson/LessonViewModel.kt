@@ -16,6 +16,8 @@ class LessonViewModel(
         when (intent) {
             Intent.LoadLessons -> loadLessons()
             Intent.Retry -> loadLessons()
+            Intent.DismissError -> dismissError()
+            Intent.StartAgain -> startAgain()
             is Intent.InputChanged -> onInputChanged(intent.text)
             Intent.CheckAnswerClicked -> checkAnswer()
             Intent.NextLessonClicked -> goToNextLesson()
@@ -155,19 +157,11 @@ class LessonViewModel(
     }
 
     private fun markCompletedAndAdvance(currentLessonId: String) {
-        val currentState = state.value
-        val isLastLesson = currentState.currentIndex == currentState.lessons.lastIndex
-
         viewModelScope.launch {
             repository.markLessonCompleted(currentLessonId)
         }
 
-        if (isLastLesson) {
-            setState { copy(isCurrentLessonSolved = true, errorMessage = null, showCorrectAnimation = false) }
-            goToNextLesson()
-        } else {
-            setState { copy(isCurrentLessonSolved = true, errorMessage = null, showCorrectAnimation = true) }
-        }
+        setState { copy(isCurrentLessonSolved = true, errorMessage = null, showCorrectAnimation = true) }
     }
 
     private fun onCorrectAnimationFinished() {
@@ -179,6 +173,24 @@ class LessonViewModel(
         setState { copy(showWrongAnimation = false) }
     }
 
+    private fun dismissError() {
+        setState { copy(errorMessage = null) }
+    }
+
+    private fun startAgain() {
+        setState {
+            copy(
+                isDone = false,
+                currentIndex = 0,
+                currentInputText = "",
+                isCurrentLessonSolved = false,
+                showCorrectAnimation = false,
+                showWrongAnimation = false,
+                errorMessage = null
+            )
+        }
+        loadLessons()
+    }
 
     private fun shouldEnableNextButton(
         lesson: Lesson?,

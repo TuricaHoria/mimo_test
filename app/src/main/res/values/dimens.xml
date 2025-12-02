@@ -24,6 +24,11 @@
     <integer name="done_screen_logo_entrance_duration_millis">700</integer>
     <dimen name="done_screen_logo_height">140dp</dimen>
     <dimen name="done_screen_spacer_height">24dp</dimen>
+    <dimen name="done_screen_horizontal_padding">32dp</dimen>
+    <dimen name="done_screen_buttons_spacer_height">48dp</dimen>
+    <dimen name="done_screen_button_height">56dp</dimen>
+    <dimen name="done_screen_button_corner_radius">12dp</dimen>
+    <dimen name="done_screen_button_spacing">16dp</dimen>
     
     <!-- Pulse animations -->
     <integer name="logo_pulse_initial_scale">98</integer>

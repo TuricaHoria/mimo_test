@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -44,6 +46,7 @@ import androidx.core.graphics.toColorInt
 @Composable
 fun LessonRoute(
     viewModel: LessonViewModel,
+    onCloseApp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
@@ -55,6 +58,7 @@ fun LessonRoute(
     LessonScreen(
         state = state,
         onIntent = viewModel::processIntent,
+        onCloseApp = onCloseApp,
         modifier = modifier
     )
 }
@@ -63,10 +67,15 @@ fun LessonRoute(
 fun LessonScreen(
     state: State,
     onIntent: (Intent) -> Unit,
+    onCloseApp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
-        state.isDone -> DoneScreen(modifier)
+        state.isDone -> DoneScreen(
+            onStartAgain = { onIntent(Intent.StartAgain) },
+            onCloseApp = onCloseApp,
+            modifier = modifier
+        )
         state.isLoading -> LoadingScreen(modifier)
         else -> LessonContent(
             state = state,
@@ -255,15 +264,6 @@ private fun LessonContent(
             }
         }
 
-        state.errorMessage?.let { message ->
-            Text(
-                text = message,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(horizontal = dimensionResource(R.dimen.lesson_error_horizontal_padding))
-            )
-        }
 
         Box(
             modifier = Modifier
@@ -305,7 +305,45 @@ private fun LessonContent(
                 onAnimationFinished = { onIntent(Intent.WrongAnimationFinished) }
             )
         }
+        
+        state.errorMessage?.let { message ->
+            ErrorDialog(
+                message = message,
+                onDismiss = { onIntent(Intent.DismissError) },
+                onRetry = { onIntent(Intent.Retry) }
+            )
+        }
     }
+}
+
+@Composable
+private fun ErrorDialog(
+    message: String,
+    onDismiss: () -> Unit,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = stringResource(R.string.error_dialog_title),
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        text = {
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        confirmButton = {
+            Button(onClick = onRetry) {
+                Text(stringResource(R.string.retry_button))
+            }
+        },
+        modifier = modifier
+    )
 }
 
 private fun String.toColorOrDefault(): Color =
@@ -345,6 +383,7 @@ private fun LessonScreenPreview() {
     LessonScreen(
         state = state,
         onIntent = {},
+        onCloseApp = {},
         modifier = Modifier
     )
 }
@@ -371,6 +410,8 @@ private fun LessonErrorPreview() {
 @Composable
 private fun LessonDonePreview() {
     DoneScreen(
+        onStartAgain = {},
+        onCloseApp = {},
         modifier = Modifier
     )
 }

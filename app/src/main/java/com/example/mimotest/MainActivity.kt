@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.example.mimotest.feature.lesson.LessonRoute
 import com.example.mimotest.feature.lesson.LessonViewModel
 import com.example.mimotest.ui.splash.SplashScreen
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
 private fun AppContent(lessonViewModel: LessonViewModel) {
     var showSplash by remember { mutableStateOf(true) }
     val splashDuration = integerResource(R.integer.splash_screen_duration_millis)
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         delay(splashDuration.toLong())
@@ -55,6 +57,7 @@ private fun AppContent(lessonViewModel: LessonViewModel) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             LessonRoute(
                 viewModel = lessonViewModel,
+                onCloseApp = { (context as? ComponentActivity)?.finish() },
                 modifier = Modifier.padding(innerPadding)
             )
         }
